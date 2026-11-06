@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 660" fill="none">
+  <defs>
+    <radialGradient id="halo">
+      <stop stop-color="#9b7836" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#9b7836" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="139" y1="219" x2="534" y2="135" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#745824"/>
+      <stop offset=".19" stop-color="#e4c47a"/>
+      <stop offset=".32" stop-color="#9a742e"/>
+      <stop offset=".52" stop-color="#f6e7b7"/>
+      <stop offset=".69" stop-color="#9e7930"/>
+      <stop offset=".84" stop-color="#d4b365"/>
+      <stop offset="1" stop-color="#795a25"/>
+    </linearGradient>
+    <linearGradient id="spine">
+      <stop stop-color="#473413"/>
+      <stop offset=".23" stop-color="#aa853c"/>
+      <stop offset=".43" stop-color="#f3dc9b"/>
+      <stop offset=".53" stop-color="#d1aa59"/>
+      <stop offset=".74" stop-color="#745421"/>
+      <stop offset="1" stop-color="#392b15"/>
+    </linearGradient>
+    <linearGradient id="inlay" x1="320" y1="114" x2="344" y2="491" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6e5ad"/>
+      <stop offset=".24" stop-color="#ddbd73" stop-opacity=".2"/>
+      <stop offset=".63" stop-color="#f0d38a"/>
+      <stop offset="1" stop-color="#e5be63" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="wire" x1="0" y1="222" x2="0" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fae6ac"/>
+      <stop offset=".41" stop-color="#88652b"/>
+      <stop offset="1" stop-color="#d4b76e"/>
+    </linearGradient>
+    <linearGradient id="pan" x1="88" y1="375" x2="197" y2="423" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7d5d28"/>
+      <stop offset=".31" stop-color="#d5af5e"/>
+      <stop offset=".47" stop-color="#f0d694"/>
+      <stop offset=".64" stop-color="#90692c"/>
+      <stop offset="1" stop-color="#473416"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="70" y1="377" x2="230" y2="389" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#947033"/>
+      <stop offset=".32" stop-color="#f7e6af"/>
+      <stop offset=".65" stop-color="#c9a558"/>
+      <stop offset="1" stop-color="#755625"/>
+    </linearGradient>
+    <radialGradient id="pivot" cx=".34" cy=".27" r=".82">
+      <stop stop-color="#f6df9e"/>
+      <stop offset=".37" stop-color="#d1aa59"/>
+      <stop offset="1" stop-color="#5d441b"/>
+    </radialGradient>
+    <pattern id="brushed" width="3" height="3" patternUnits="userSpaceOnUse">
+      <path d="M0 .5h3" stroke="#fff2ca" stroke-opacity=".09" stroke-width=".55"/>
+    </pattern>
+    <path id="upright" d="M330 111 342 143 337 188 342 402Q344 462 379 482H281Q316 462 318 402L323 188 318 143Z"/>
+    <path id="pan-front" d="M68 379H228Q213 411 169 420 148 423 127 420 83 411 68 379Z"/>
+    <g id="suspended-pan">
+      <path d="M148 219 83 377m65-158 65 158" stroke="url(#wire)" stroke-width="1.8"/>
+      <path d="M148 231v143" stroke="#d4b76e" stroke-opacity=".24" stroke-width=".8" stroke-dasharray="2 5"/>
+      <path d="M68 379C68 373 106 369 148 369s80 4 80 10" stroke="#be9a50" stroke-opacity=".57"/>
+      <use href="#pan-front" fill="url(#pan)" stroke="#af8745" stroke-width=".8"/>
+      <use href="#pan-front" fill="url(#brushed)"/>
+      <path d="M69 379C82 387 214 387 227 379" stroke="url(#rim)" stroke-width="2"/>
+      <path d="M99 403q49 21 98 0" stroke="#fff0bd" stroke-opacity=".26" stroke-width=".8"/>
+      <circle cx="148" cy="219" r="4" fill="url(#pivot)" stroke="#f0cf82" stroke-width=".7"/>
+    </g>
+  </defs>
+
+  <ellipse cx="330" cy="325" rx="305" ry="284" fill="url(#halo)"/>
+  <g stroke="#d4b76e" stroke-opacity=".19" stroke-width=".75">
+    <circle cx="330" cy="330" r="248"/>
+    <circle cx="330" cy="330" r="223" stroke-dasharray="2 6"/>
+    <path d="M330 57v546M57 330h546M153 153l354 354M153 507l354-354" stroke-opacity=".15"/>
+    <path d="M102 112h20m-10-10v20m426-10h20m-10-10v20M102 548h20m-10-10v20m426-10h20m-10-10v20" stroke-opacity=".48"/>
+  </g>
+  <path d="M221 520q109-23 218 0" stroke="#a27c34" stroke-opacity=".23" stroke-width=".8"/>
+
+  <use href="#upright" fill="url(#spine)" stroke="#c19b50" stroke-width=".8"/>
+  <use href="#upright" fill="url(#brushed)"/>
+  <path d="M330 119v298q0 45-14 59m14-59q0 45 14 59" stroke="url(#inlay)" stroke-width="1.05"/>
+  <path d="M284 481h92l20 13H264Z" fill="url(#beam)" stroke="#d1ac60" stroke-width=".8"/>
+  <path d="M264 494h132v6H264Z" fill="url(#spine)"/>
+  <path d="M264 500h132l13 8H251Z" fill="url(#beam)" stroke="#d6b66a" stroke-width=".75"/>
+  <path d="M251 508h158" stroke="#f0d391" stroke-opacity=".55" stroke-width="1.15"/>
+
+  <path d="M139 212c43 2 93-8 143-32l35-17q13-6 26 0l35 17c50 24 100 34 143 32l-12 12c-52 0-99-13-138-29l-30-13q-11-5-22 0l-30 13c-39 16-86 29-138 29Z" fill="url(#beam)" stroke="#d7b76d" stroke-width=".85"/>
+  <path d="M147 216c53 0 98-15 142-35l30-14q11-5 22 0l30 14c44 20 89 35 142 35" stroke="#ffedb6" stroke-opacity=".63" stroke-width=".9"/>
+  <use href="#suspended-pan"/>
+  <use href="#suspended-pan" x="364"/>
+  <circle cx="330" cy="174" r="18" fill="#1b150b" stroke="#b8944d" stroke-width="1.2"/>
+  <path d="M330 162 342 174 330 186 318 174Z" fill="url(#pivot)" stroke="#f5dea0" stroke-width=".8"/>
+  <path d="M330 165v18m-9-9h18" stroke="#4f3916" stroke-opacity=".6" stroke-width=".75"/>
+</svg>
