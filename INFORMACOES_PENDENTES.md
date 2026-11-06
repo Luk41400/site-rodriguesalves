@@ -11,7 +11,6 @@
 - Confirmar a lista de áreas atendidas e os termos adequados para descrevê-las. A seção possui estrutura para acrescentar cards após essa confirmação.
 - Confirmar a grafia cadastral do logradouro e a identificação profissional a publicar, incluindo eventual inscrição da sociedade na OAB e a situação atual dos registros informados na bio.
 - Confirmar se o número possui WhatsApp comercial antes de adicionar o canal. Obter um e-mail institucional caso o escritório queira receber mensagens diretamente pelo formulário.
-- Confirmar o domínio público e preencher `siteOrigin` em `site.config.mjs`.
 - Obter os arquivos oficiais e a autorização de uso para logotipo e fotografias, caso o escritório queira incorporá-los.
 - Confirmar com o escritório a redação da política de privacidade e o canal para solicitações de titulares. Para envio direto futuro, definir destinatário, fornecedor, controle de acesso e retenção antes de ativar a coleta.
 - Confirmar com o escritório eventuais informações de trajetória e detalhes específicos do atendimento antes de incluí-los.

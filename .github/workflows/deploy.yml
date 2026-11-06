@@ -1,0 +1,54 @@
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - name: Obter código
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Configurar GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Gerar o site
+        env:
+          GITHUB_PAGES_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          : "${GITHUB_PAGES_URL:?O GitHub Pages deve fornecer a URL pública}"
+          node scripts/build.mjs
+      - name: Enviar artefato
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar o artefato
+        id: deployment
+        uses: actions/deploy-pages@v4

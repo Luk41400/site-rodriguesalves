@@ -19,8 +19,9 @@ HTML semântico, CSS, JavaScript nativo e Node.js 22 ou superior. O projeto não
 - `src/index.html` contém a página institucional.
 - `src/privacidade.html` contém a Política de Privacidade.
 - `src/assets/` reúne os estilos Aural e os estilos de composição, as fontes locais, os gráficos e as interações.
-- `site.config.mjs` define a origem pública e os dados estruturados do escritório.
+- `site.config.mjs` mantém os dados estruturados do escritório.
 - `scripts/` contém a geração do site estático e o servidor de prévia.
+- `.github/workflows/deploy.yml` gera e publica o site no GitHub Pages.
 - `dist/` contém o resultado do build e é ignorado pelo Git.
 
 ## Instalação e prévia local
@@ -34,21 +35,18 @@ node scripts/serve.mjs
 
 Abra [a prévia local](http://127.0.0.1:4173/). Execute o build novamente após editar os arquivos. Com npm disponível, `npm run dev` executa as duas etapas. Para somente gerar os arquivos de publicação, use `node scripts/build.mjs` ou `npm run build`.
 
-## Publicação na Vercel
+## Publicação no GitHub Pages
 
-O projeto é um site estático, sem framework. A Vercel usa o comando de instalação vazio, executa `node scripts/build.mjs` e publica a pasta `dist`. A geração do SEO de produção usa a variável de sistema `VERCEL_ENV`. O projeto dispensa credenciais e variáveis secretas.
+Em **Settings → Pages → Build and deployment → Source**, selecione **GitHub Actions**. Cada push na branch `main` roda o build com Node.js 22 e publica o artefato de `dist/`. Para executar manualmente, abra **Actions → Publicar no GitHub Pages → Run workflow**, selecione `main` e confirme. [Configurações do repositório](https://github.com/Luk41400/site-rodriguesalves/settings/pages)
 
-1. Revise [as informações pendentes](INFORMACOES_PENDENTES.md) e confirme a identificação profissional a publicar.
-2. Defina em `site.config.mjs` a origem HTTPS do domínio definitivo, sem barra final. Use a mesma origem na configuração de domínios da Vercel. Se houver versões com e sem `www`, configure a secundária para redirecionar à principal.
-3. Importe o repositório na Vercel e ative a opção **Automatically expose System Environment Variables**. O `vercel.json` usa `node scripts/build.mjs`, publica `dist` e serve a política em `/privacidade`. O caminho antigo `/privacidade.html` redireciona para a URL curta. [Configuração de rotas da Vercel](https://vercel.com/docs/project-configuration/vercel-json) · [Variáveis de sistema](https://vercel.com/docs/environment-variables/system-environment-variables)
-4. Em produção, com o domínio definido e `VERCEL_ENV=production`, o build emite URLs canônicas, Open Graph e Twitter Cards com imagem absoluta, além de `sitemap.xml` e sua referência no `robots.txt`. Prévias e builds sem domínio usam `noindex, follow` e deixam o sitemap indisponível. Após o deploy, confira as duas páginas e os arquivos de rastreamento na origem pública.
+O workflow usa a URL fornecida pelo GitHub Pages para gerar as URLs canônicas, os metadados sociais e o sitemap. A página de privacidade fica em `privacidade/` dentro do site. [Site publicado](https://luk41400.github.io/site-rodriguesalves/) · [Sitemap](https://luk41400.github.io/site-rodriguesalves/sitemap.xml)
 
 ## Google Search Console
 
-1. No Search Console, selecione **Adicionar propriedade** e escolha **Domínio**. Informe o domínio definitivo sem protocolo nem caminho. [Adicionar uma propriedade](https://support.google.com/webmasters/answer/34592)
-2. Copie o registro TXT informado pelo Google para o provedor DNS do domínio. Após a propagação, volte ao Search Console, clique em **Verificar** e mantenha o registro DNS. [Verificação de propriedade](https://support.google.com/webmasters/answer/9008080)
-3. Com o deploy de produção ativo, abra `/sitemap.xml` no domínio definitivo. Em **Sitemaps**, envie essa URL e confira se o Google conseguiu ler o arquivo. [Relatório de sitemaps](https://support.google.com/webmasters/answer/7451001)
-4. Use **Inspeção de URL** para verificar a página inicial e `/privacidade`. Compare a URL canônica declarada com a escolhida pelo Google quando houver dados. Em **Indexação > Páginas**, acompanhe falhas de rastreamento, bloqueios por `noindex` e URLs duplicadas. [Inspeção de URL](https://support.google.com/webmasters/answer/9012289) · [Indexação de páginas](https://support.google.com/webmasters/answer/7440203)
+1. No Search Console, selecione **Adicionar propriedade** e escolha **Prefixo do URL**. Informe a URL completa do site, incluindo `/site-rodriguesalves/`. [Adicionar uma propriedade](https://support.google.com/webmasters/answer/34592)
+2. Siga o método de verificação oferecido para a propriedade, como a tag HTML na página inicial. [Verificação de propriedade](https://support.google.com/webmasters/answer/9008080)
+3. Com o site publicado, em **Sitemaps**, envie `https://luk41400.github.io/site-rodriguesalves/sitemap.xml` e confira a leitura do arquivo. [Relatório de sitemaps](https://support.google.com/webmasters/answer/7451001)
+4. Use **Inspeção de URL** para verificar a página inicial e a política em `privacidade/`. Compare a URL canônica declarada com a escolhida pelo Google quando houver dados. Em **Indexação > Páginas**, acompanhe falhas de rastreamento, bloqueios por `noindex` e URLs duplicadas. [Inspeção de URL](https://support.google.com/webmasters/answer/9012289) · [Indexação de páginas](https://support.google.com/webmasters/answer/7440203)
 5. Em **Desempenho > Resultados da pesquisa**, acompanhe impressões, cliques e consultas locais. Use o relatório de **Core Web Vitals** quando houver dados de visitas suficientes. [Desempenho](https://support.google.com/webmasters/answer/7576553) · [Core Web Vitals](https://support.google.com/webmasters/answer/9205520)
 
 ## Contato e dados institucionais

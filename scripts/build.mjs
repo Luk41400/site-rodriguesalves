@@ -4,16 +4,28 @@ import { legalService, siteOrigin } from "../site.config.mjs";
 
 const src = new URL("../src/", import.meta.url);
 const dist = new URL("../dist/", import.meta.url);
+const pagesBase = process.env.GITHUB_PAGES_URL ? new URL(process.env.GITHUB_PAGES_URL) : null;
+if (pagesBase) {
+  if (pagesBase.protocol !== "https:" || pagesBase.username || pagesBase.password || pagesBase.port ||
+      pagesBase.search || pagesBase.hash || !/^\/(?:[\w.-]+\/)*[\w.-]*$/.test(pagesBase.pathname)) {
+    throw new Error("GITHUB_PAGES_URL deve conter a URL pública HTTPS do site no GitHub Pages.");
+  }
+  pagesBase.pathname = pagesBase.pathname.replace(/\/?$/, "/");
+}
+
+const privacyRoute = pagesBase ? "privacidade/" : "privacidade";
 const pages = [
   {
     file: "index.html",
-    route: "/",
+    route: "",
     title: "Advocacia Rodrigues e Alves | Escritório de Advocacia em Valparaíso - SP",
     description: "Conheça a Advocacia Rodrigues e Alves, escritório de advocacia em Valparaíso - SP. Informações institucionais, localização e canais de contato."
   },
   {
     file: "privacidade.html",
-    route: "/privacidade",
+    route: privacyRoute,
+    output: pagesBase ? "privacidade/index.html" : "privacidade.html",
+    rootPath: pagesBase ? "../" : "./",
     title: "Política de Privacidade | Advocacia Rodrigues e Alves",
     description: "Saiba como o site da Advocacia Rodrigues e Alves trata dados pessoais no rascunho de contato e nas integrações externas."
   }
@@ -26,11 +38,11 @@ if (origin && (
   throw new Error("siteOrigin deve conter a origem HTTPS do domínio definitivo, sem porta, caminho ou barra final.");
 }
 
-const production = origin && process.env.VERCEL_ENV === "production";
+const publicBase = pagesBase ?? (process.env.VERCEL_ENV === "production" ? origin : null);
 const year = new Intl.DateTimeFormat("pt-BR", { year: "numeric", timeZone: "America/Sao_Paulo" }).format(new Date());
 const schema = JSON.stringify({
   ...legalService,
-  ...(production && { "@id": new URL("/#escritorio", origin).href, url: origin.href })
+  ...(publicBase && { "@id": new URL("#escritorio", publicBase).href, url: publicBase.href })
 }).replaceAll("<", "\\u003c");
 const imageAlt = "Balança jurídica dourada e o nome Advocacia Rodrigues e Alves";
 
@@ -40,24 +52,25 @@ function escapeHtml(value) {
 
 await mkdir(dist, { recursive: true });
 await cp(new URL("assets/", src), new URL("assets/", dist), { recursive: true });
+await rm(new URL(pagesBase ? "privacidade.html" : "privacidade/index.html", dist), { force: true });
 
-for (const { file, route, title, description } of pages) {
+for (const { file, route, title, description, output = file, rootPath = "./" } of pages) {
   const tags = [
     `<title>${escapeHtml(title)}</title>`,
     `<meta name="description" content="${escapeHtml(description)}">`,
-    `<meta name="robots" content="${production ? "index, follow, max-image-preview:large" : "noindex, follow"}">`,
+    `<meta name="robots" content="${publicBase ? "index, follow, max-image-preview:large" : "noindex, follow"}">`,
     '<meta property="og:type" content="website">',
     '<meta property="og:locale" content="pt_BR">',
     `<meta property="og:site_name" content="${escapeHtml(legalService.name)}">`,
     `<meta property="og:title" content="${escapeHtml(title)}">`,
     `<meta property="og:description" content="${escapeHtml(description)}">`,
-    `<meta name="twitter:card" content="${production ? "summary_large_image" : "summary"}">`,
+    `<meta name="twitter:card" content="${publicBase ? "summary_large_image" : "summary"}">`,
     `<meta name="twitter:title" content="${escapeHtml(title)}">`,
     `<meta name="twitter:description" content="${escapeHtml(description)}">`
   ];
-  if (production) {
-    const canonical = new URL(route, origin).href;
-    const image = new URL("/assets/compartilhamento.png", origin).href;
+  if (publicBase) {
+    const canonical = new URL(route, publicBase).href;
+    const image = new URL("assets/compartilhamento.png", publicBase).href;
     tags.push(
       `<link rel="canonical" href="${canonical}">`,
       `<meta property="og:url" content="${canonical}">`,
@@ -73,16 +86,20 @@ for (const { file, route, title, description } of pages) {
 
   const template = await readFile(new URL(file, src), "utf8");
   const html = template.replaceAll("{{YEAR}}", year)
+    .replaceAll("{{ROOT_PATH}}", rootPath)
+    .replaceAll("{{PRIVACY_PATH}}", "./" + privacyRoute)
     .replace("{{LEGAL_SCHEMA}}", () => schema)
     .replace("{{PAGE_SEO}}", () => tags.join("\n  "));
-  await writeFile(new URL(file, dist), html);
+  const outputFile = new URL(output, dist);
+  await mkdir(new URL("./", outputFile), { recursive: true });
+  await writeFile(outputFile, html);
 }
 
 const sitemapFile = new URL("sitemap.xml", dist);
 let robots = "User-agent: *\nAllow: /\n";
-if (production) {
-  robots += `Sitemap: ${origin.origin}/sitemap.xml\n`;
-  const urls = pages.map(({ route }) => `  <url><loc>${new URL(route, origin).href}</loc></url>`).join("\n");
+if (publicBase) {
+  robots += `Sitemap: ${new URL("sitemap.xml", publicBase).href}\n`;
+  const urls = pages.map(({ route }) => `  <url><loc>${new URL(route, publicBase).href}</loc></url>`).join("\n");
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
   await writeFile(sitemapFile, sitemap);
 } else {
