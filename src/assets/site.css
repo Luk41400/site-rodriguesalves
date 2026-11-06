@@ -55,6 +55,7 @@ address { font-style: normal; }
 
 .practice { background: radial-gradient(ellipse at 10% 95%, #211b0e 0%, var(--bg) 59%); }
 .practice-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; }
+.practice-cards { display: grid; gap: inherit; min-width: 0; }
 .practice-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: clamp(13px, 2vw, 25px); padding: clamp(20px, 3vw, 40px); transition: transform .5s var(--ease), background .4s; }
 .practice-card:hover, .practice-card:focus-within { transform: translateY(-3px); background: #282112; }
 .practice-card .kicker { margin: 4px 0 8px; }
